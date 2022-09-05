@@ -18,7 +18,7 @@ function GameBoyAdvanceIO(SKIPBoot, coreExposed, BIOS, ROM) {
     this.timerClocks = 0;
     this.serialClocks = 0;
     this.nextEventClocks = 0;
-    //this.BIOSFound = false;
+    this.BIOSFound = false;
     //Do we skip the BIOS Boot Intro?
     this.SKIPBoot = !!SKIPBoot;
     //References passed to us:

@@ -4083,16 +4083,17 @@ GameBoyAdvanceMemory.prototype.loadBIOS = function () {
     var allowInit = 1;
     //Ensure BIOS is of correct length:
     if ((this.IOCore.BIOS.length | 0) == 0x4000) {
-        //this.IOCore.BIOSFound = true;
+        this.IOCore.BIOSFound = true;
         for (var index = 0; (index | 0) < 0x4000; index = ((index | 0) + 1) | 0) {
             this.BIOS[index & 0x3FFF] = this.IOCore.BIOS[index & 0x3FFF] & 0xFF;
         }
     }
     else {
-        //this.IOCore.BIOSFound = false;
+        this.IOCore.BIOSFound = false;
         this.IOCore.SKIPBoot = true;
-        //Kill init, rather than allow HLE for now:
-        allowInit = 0;
+        for (var index = 0; (index | 0) < 0x4000; index = ((index | 0) + 1) | 0) {
+            this.BIOS[index & 0x3FFF] = hleBIOS[index & 0x3FFF] & 0xFF;
+        }
     }
     return allowInit | 0;
 }
