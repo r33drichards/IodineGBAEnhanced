@@ -1,9 +1,12 @@
 JavaScript GameBoy Advance Emulator
 =================================
 
-**Copyright (C) 2010 - 2017 Grant Galitz**
+Fork of the Iodine Emulator by Grant Galitz with support for some additional features including:
+- Play games without a bios file (experimental)
+- Support for Real-time clock
+- Savestates (comming soon)
 
-A GameBoy Advance emulator that utilizes HTML5 canvas and JavaScript audio APIs to provide a full emulation of the console.
+
 
 **License:**
 
