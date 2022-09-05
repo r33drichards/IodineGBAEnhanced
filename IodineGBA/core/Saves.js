@@ -63,11 +63,11 @@ GameBoyAdvanceSaves.prototype.exportSaveType = function () {
 GameBoyAdvanceSaves.prototype.readGPIO8 = function (address) {
     address = address | 0;
     var data = 0;
-    if ((this.GPIOChip.getType() | 0) > 0) {
+    /*if ((this.GPIOChip.getType() | 0) > 0) {
         //GPIO:
         data = this.GPIOChip.read8(address | 0) | 0;
     }
-    else {
+    else*/ {
         //ROM:
         data = this.cartridge.readROMOnly8(address | 0) | 0;
     }
@@ -89,7 +89,7 @@ GameBoyAdvanceSaves.prototype.readEEPROM8 = function (address) {
 GameBoyAdvanceSaves.prototype.readGPIO16 = function (address) {
     address = address | 0;
     var data = 0;
-    if ((this.GPIOChip.getType() | 0) > 0) {
+    if ((this.GPIOChip.getType() | 0) > 0 && ((0xC4 <= address) && (0xC8 >= address))) {
         //GPIO:
         data = this.GPIOChip.read16(address | 0) | 0;
     }
@@ -115,11 +115,12 @@ GameBoyAdvanceSaves.prototype.readEEPROM16 = function (address) {
 GameBoyAdvanceSaves.prototype.readGPIO32 = function (address) {
     address = address | 0;
     var data = 0;
+    /*
     if ((this.GPIOChip.getType() | 0) > 0) {
         //GPIO:
         data = this.GPIOChip.read32(address | 0) | 0;
     }
-    else {
+    else*/ {
         //ROM:
         data = this.cartridge.readROMOnly32(address | 0) | 0;
     }

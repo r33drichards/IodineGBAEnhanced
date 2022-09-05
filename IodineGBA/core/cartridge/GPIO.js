@@ -9,10 +9,12 @@
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 function GameBoyAdvanceGPIOChip() {
-    this.type = 0;
-    this.data = 0;
-    this.direction = 0;
-    this.readWrite = 0;
+    this.type = 1;
+    this.rtc = new GameBoyAdvanceRTC(this);
+
+    this.direction = 0; // ROM 0xC8 
+    this.readWrite = 0; // ROM 0xC6
+    this.data = 0;      // ROM 0xC4
 }
 GameBoyAdvanceGPIOChip.prototype.getType = function () {
     return this.type | 0;
@@ -23,12 +25,11 @@ GameBoyAdvanceGPIOChip.prototype.setType = function (type) {
 }
 GameBoyAdvanceGPIOChip.prototype.read = function (address) {
     address = address | 0;
-    var data = 0;
+    let data = 0;
     if (this.readWrite | 0) {
         switch (address & 0xF) {
             case 0x4:
-                this.readTick();
-                data = this.data | 0;
+                data = this.data;
                 break;
             case 0x6:
                 data = this.direction | 0;
@@ -44,13 +45,34 @@ GameBoyAdvanceGPIOChip.prototype.write = function (address, data) {
     data = data | 0;
     switch (address & 0xF) {
         case 0x4:
-            this.data = data & 0xF;
-            this.writeTick(data | 0);
+            this.rtc.setPins(data & 0xF);
+            if (this.readWrite) {
+                let old = this.read(0xC4);
+                old &= ~this.direction;
+                this.data = old | (data & this.direction);
+            }
             break;
         case 0x6:
             this.direction = data & 0xF;
+            this.rtc.setDirection(this.direction);
             break;
         case 0x8:
             this.readWrite = data & 0x1;
     }
 }
+
+GameBoyAdvanceGPIOChip.prototype.write16 = function (address, data) {
+    this.write(address, data);
+}
+
+GameBoyAdvanceGPIOChip.prototype.read16 = function (address) {
+    return this.read(address);
+}
+
+GameBoyAdvanceGPIOChip.prototype.outputPins = function(data) {
+    if (this.readWrite) {
+        let old = this.read(0xC4);
+        old &= ~this.direction;
+        this.data = data | (data & ~this.direction & 0xF);
+	}
+};
