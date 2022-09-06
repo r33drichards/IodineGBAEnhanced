@@ -171,6 +171,12 @@ li.hide {
     opacity: 1;
 }
 
+#save_state_menu ul li{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
 /*
 |-----------------------------------------
 | Touch Controls

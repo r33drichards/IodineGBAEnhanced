@@ -266,13 +266,8 @@ function registerGUIEvents() {
     else if (typeof document.webkitHidden !== "undefined") {
         addEvent("webkitvisibilitychange", document, webkitVisibilityChangeHandle);
     }
-    addEvent("click", document.getElementById("ssSlot1"), e => IodineGUI.Iodine.saveStateManager.saveState("1"));
-    addEvent("click", document.getElementById("ssSlot2"), e => IodineGUI.Iodine.saveStateManager.saveState("2"));
-    addEvent("click", document.getElementById("ssSlot3"), e => IodineGUI.Iodine.saveStateManager.saveState("3"));
-    addEvent("click", document.getElementById("lsSlot1"), e => IodineGUI.Iodine.saveStateManager.loadState("1"));
-    addEvent("click", document.getElementById("lsSlot2"), e => IodineGUI.Iodine.saveStateManager.loadState("2"));
-    addEvent("click", document.getElementById("lsSlot3"), e => IodineGUI.Iodine.saveStateManager.loadState("3"));
     //Run on init as well:
+    createSavestateSlots(3);
     resizeCanvasFunc();
 }
 function registerDefaultSettings() {
@@ -667,4 +662,40 @@ function removeEvent(sEvent, oElement, fListener) {
     catch (error) {
         oElement.detachEvent("on" + sEvent, fListener);    //Pity for IE.
     }
+}
+function createSavestateSlots(slotCount) {
+    let menuContainer = document.getElementById("save_state_menu_container");
+    for (let i = 1; i <= slotCount; i++) {
+        menuContainer.appendChild(createSavestateSlot(i));
+    }
+}
+function createSavestateSlot(slotId) {
+    let slotListItem = document.createElement("li");
+    let slotTitle = document.createElement("span");
+    slotTitle.textContent = "Slot " + slotId;
+    slotListItem.appendChild(slotTitle);
+    let slotImage = document.createElement("img");
+    slotImage.id = "ssImg" + slotId;
+    slotImage.src = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+    slotImage.width = 60;
+    slotImage.height = 40;
+    slotListItem.appendChild(slotImage);
+    let slotActionList = document.createElement("ul");
+    let slotActionSave = document.createElement("li");
+    slotActionSave.textContent = "Save";
+    slotActionSave.id = "ssSlot" + slotId;
+    let slotActionLoad = document.createElement("li");
+    slotActionLoad.textContent = "Load";
+    slotActionLoad.id = "lsSlot" + slotId;
+    slotActionLoad.classList.add("hide");
+    addEvent("click", slotActionSave, e => { 
+        IodineGUI.Iodine.saveStateManager.saveState(slotId)
+        slotActionLoad.classList.remove("hide");
+        slotImage.src = document.getElementById("emulator_target").toDataURL();
+    });
+    addEvent("click", slotActionLoad, e => IodineGUI.Iodine.saveStateManager.loadState(slotId));
+    slotActionList.appendChild(slotActionSave);
+    slotActionList.appendChild(slotActionLoad);
+    slotListItem.appendChild(slotActionList);
+    return slotListItem;
 }
