@@ -21,6 +21,7 @@
         <script src="IodineGBA/core/Wait.js"></script>
         <script src="IodineGBA/core/CPU.js"></script>
         <script src="IodineGBA/core/Saves.js"></script>
+        <script src="IodineGBA/core/SaveState.js"></script>
         <script src="IodineGBA/core/sound/FIFO.js"></script>
         <script src="IodineGBA/core/sound/Channel1.js"></script>
         <script src="IodineGBA/core/sound/Channel2.js"></script>
@@ -194,6 +195,17 @@
                             <li>
                                 <a href="./" id="export" target="_new">Export All Saves</a>
                             </li>
+                        </ul>
+                    </li>
+                    <li id="save_state_menu">
+                        Save States
+                        <ul id="save_state_menu_container">
+                            <li id="ssSlot1"><span>Save State Slot 1</span></li>
+                            <li id="ssSlot2"><span>Save State Slot 2</span></li>
+                            <li id="ssSlot3"><span>Save State Slot 3</span></li>
+                            <li id="lsSlot1"><span>Load State Slot 1</span></li>
+                            <li id="lsSlot2"><span>Load State Slot 2</span></li>
+                            <li id="lsSlot3"><span>Load State Slot 3</span></li>
                         </ul>
                     </li>
                     <li id="fullscreen">Fullscreen</li>

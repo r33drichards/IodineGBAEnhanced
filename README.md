@@ -4,7 +4,7 @@ JavaScript GameBoy Advance Emulator
 Fork of the Iodine Emulator by Grant Galitz with support for some additional features including:
 - Play games without a bios file (experimental)
 - Support for Real-time clock
-- Savestates (comming soon)
+- Savestates 
 
 
 

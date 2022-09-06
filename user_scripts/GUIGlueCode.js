@@ -266,6 +266,12 @@ function registerGUIEvents() {
     else if (typeof document.webkitHidden !== "undefined") {
         addEvent("webkitvisibilitychange", document, webkitVisibilityChangeHandle);
     }
+    addEvent("click", document.getElementById("ssSlot1"), e => IodineGUI.Iodine.saveStateManager.saveState("1"));
+    addEvent("click", document.getElementById("ssSlot2"), e => IodineGUI.Iodine.saveStateManager.saveState("2"));
+    addEvent("click", document.getElementById("ssSlot3"), e => IodineGUI.Iodine.saveStateManager.saveState("3"));
+    addEvent("click", document.getElementById("lsSlot1"), e => IodineGUI.Iodine.saveStateManager.loadState("1"));
+    addEvent("click", document.getElementById("lsSlot2"), e => IodineGUI.Iodine.saveStateManager.loadState("2"));
+    addEvent("click", document.getElementById("lsSlot3"), e => IodineGUI.Iodine.saveStateManager.loadState("3"));
     //Run on init as well:
     resizeCanvasFunc();
 }
