@@ -69,6 +69,30 @@ GameBoyAdvanceGPIOChip.prototype.read16 = function (address) {
     return this.read(address);
 }
 
+GameBoyAdvanceGPIOChip.prototype.supportsWrite8 = function (address) {
+    return false;
+}
+
+GameBoyAdvanceGPIOChip.prototype.supportsWrite16 = function (address) {
+    return address >= 0xC4 && address <= 0xC8;
+}
+
+GameBoyAdvanceGPIOChip.prototype.supportsWrite32 = function (address) {
+    return false;
+}
+
+GameBoyAdvanceGPIOChip.prototype.supportsRead8 = function (address) {
+    return false;
+}
+
+GameBoyAdvanceGPIOChip.prototype.supportsRead16 = function (address) {
+    return address >= 0xC4 && address <= 0xC8;
+}
+
+GameBoyAdvanceGPIOChip.prototype.supportsRead32 = function (address) {
+    return false;
+}
+
 GameBoyAdvanceGPIOChip.prototype.outputPins = function(data) {
     if (this.readWrite) {
         let old = this.read(0xC4);
