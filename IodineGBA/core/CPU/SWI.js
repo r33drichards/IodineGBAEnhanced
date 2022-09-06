@@ -124,8 +124,7 @@ GameBoyAdvanceSWI.prototype.execute = function (opcode) {
             break;                 
         case SWI_OP_CODE.GBA_SWI_VBLANK_INTR_WAIT:
             //console.info("Calling GBA_SWI_VBLANK_INTR_WAIT...");
-            this.IRQ.interruptsEnabled = 1;
-            if (this.IRQ.interruptsRequested) { this.CPUCore.IRQinARM(); }
+            this.IOCore.handleHalt();
             break;          
         case SWI_OP_CODE.GBA_SWI_DIV: 
         {
@@ -401,8 +400,7 @@ GameBoyAdvanceSWI.prototype.execute = function (opcode) {
         case SWI_OP_CODE.GBA_SWI_SOUND_DRIVER_GET_JUMP_LIST:
         {
             //console.info("UNSUPPORTED CALL TO GBA_SWI_SOUND_DRIVER_GET_JUMP_LIST");
-            this.IRQ.interruptsEnabled = 1;
-            if (this.IRQ.interruptsRequested) { this.CPUCore.IRQinARM(); }
+            this.IOCore.handleHalt(); 
         }   break;
         default:
             this.warnUnimplementedCalls && console.log("UNKNOWN OP CODE: " + opcode);    
