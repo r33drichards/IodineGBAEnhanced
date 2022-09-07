@@ -31,7 +31,8 @@ function keyUpGBA(keyCode) {
 }
 function keyUp(keyCode) {
     keyCode = keyCode | 0;
-    for (var keyMapIndex = 0; (keyMapIndex | 0) < 8; keyMapIndex = ((keyMapIndex | 0) + 1) | 0) {
+    let emulatorBindings = IodineGUI.defaults.keyZonesControl.length;
+    for (var keyMapIndex = 0; (keyMapIndex | 0) < emulatorBindings; keyMapIndex = ((keyMapIndex | 0) + 1) | 0) {
         if ((IodineGUI.defaults.keyZonesControl[keyMapIndex | 0] | 0) == (keyCode | 0)) {
             keyboardEmulatorControl(keyMapIndex | 0);
             return true;
@@ -82,6 +83,10 @@ function keyboardEmulatorControl(keyCode) {
             break;
         case 7:
             IodineGUI.Iodine.restart();
+        case 8:
+            saveState(1);
+        case 9:
+            loadState(1);        
     }
 }
 function toggleFullScreen() {
@@ -121,4 +126,14 @@ function togglePlayState() {
     else {
         IodineGUI.Iodine.play();
     }
+}
+function saveState(slot) {
+    IodineGUI.Iodine.saveStateManager.saveState(slot);
+    const event = new CustomEvent("SaveStateEvent", { detail: {slot: slot}, bubbles: true, cancelable: true, composed: true});
+    document.dispatchEvent(event);
+}
+function loadState(slot) {
+    IodineGUI.Iodine.saveStateManager.loadState(slot);
+    const event = new CustomEvent("LoadStateEvent", { detail: {slot: slot}, bubbles: true, cancelable: true, composed: true});
+    document.dispatchEvent(event);
 }

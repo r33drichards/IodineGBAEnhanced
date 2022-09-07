@@ -191,6 +191,14 @@ function registerGUIEvents() {
         IodineGUI.toMap = IodineGUI.defaults.keyZonesControl;
         IodineGUI.toMapIndice = 7;
     });
+    addEvent("click", document.getElementById("key_quicksave"), function () {
+        IodineGUI.toMap = IodineGUI.defaults.keyZonesControl;
+        IodineGUI.toMapIndice = 8;
+    });
+    addEvent("click", document.getElementById("key_quickload"), function () {
+        IodineGUI.toMap = IodineGUI.defaults.keyZonesControl;
+        IodineGUI.toMapIndice = 9;
+    });
     addEvent("change", document.getElementById("import"), function (e) {
              if (typeof this.files != "undefined") {
                 try {
@@ -423,6 +431,18 @@ function registerDefaultSettings() {
     else {
         IodineGUI.defaults.keyZonesControl[7] = findValue("key_restart");
     }
+    if (findValue("key_quicksave") === null) {
+        setValue("key_quicksave", IodineGUI.defaults.keyZonesControl[8] | 0);
+    }
+    else {
+        IodineGUI.defaults.keyZonesControl[8] = findValue("key_quicksave");
+    }
+    if (findValue("key_quickload") === null) {
+        setValue("key_quickload", IodineGUI.defaults.keyZonesControl[9] | 0);
+    }
+    else {
+        IodineGUI.defaults.keyZonesControl[9] = findValue("key_quickload");
+    }
 }
 function saveKeyBindings() {
     setValue("key_a", IodineGUI.defaults.keyZonesGBA[0] | 0);
@@ -443,6 +463,8 @@ function saveKeyBindings() {
     setValue("key_fullscreen", IodineGUI.defaults.keyZonesControl[5] | 0);
     setValue("key_playpause", IodineGUI.defaults.keyZonesControl[6] | 0);
     setValue("key_restart", IodineGUI.defaults.keyZonesControl[7] | 0);
+    setValue("key_quicksave", IodineGUI.defaults.keyZonesControl[8] | 0);
+    setValue("key_quickload", IodineGUI.defaults.keyZonesControl[9] | 0);
 }
 function registerGUISettings() {
     document.getElementById("sound").checked = IodineGUI.defaults.sound;
@@ -688,12 +710,22 @@ function createSavestateSlot(slotId) {
     slotActionLoad.textContent = "Load";
     slotActionLoad.id = "lsSlot" + slotId;
     slotActionLoad.classList.add("hide");
-    addEvent("click", slotActionSave, e => { 
-        IodineGUI.Iodine.saveStateManager.saveState(slotId)
-        slotActionLoad.classList.remove("hide");
-        slotImage.src = document.getElementById("emulator_target").toDataURL();
-    });
-    addEvent("click", slotActionLoad, e => IodineGUI.Iodine.saveStateManager.loadState(slotId));
+    addEvent("click", slotActionSave, e => saveState(slotId));
+    document.addEventListener('SaveStateEvent', (e) => {
+        if(e.detail.slot == slotId) {
+            slotActionLoad.classList.remove("hide");
+            slotImage.src = document.getElementById("emulator_target").toDataURL();
+        }
+    }, false);
+    addEvent("click", slotActionLoad, e => loadState(slotId));
+    document.addEventListener('LoadStateEvent', (e) => {
+        if(e.detail.slot == slotId && !IodineGUI.isPlaying) {
+            let image = new Image();
+            image.src = slotImage.src;
+            let ctx = document.getElementById("emulator_target").getContext('2d')
+            ctx && ctx.drawImage(image, 0, 0);
+        }
+    }, false);
     slotActionList.appendChild(slotActionSave);
     slotActionList.appendChild(slotActionLoad);
     slotListItem.appendChild(slotActionList);

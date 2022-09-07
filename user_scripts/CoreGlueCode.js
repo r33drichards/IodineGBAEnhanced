@@ -69,7 +69,11 @@ var IodineGUI = {
             //Play/Pause:
             80,
             //Restart:
-            82
+            82,
+            //Quick Save:
+            49,
+            //Quick Load:
+            50
         ]
     }
 };
