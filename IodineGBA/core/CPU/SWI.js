@@ -86,26 +86,19 @@ GameBoyAdvanceSWI.prototype.execute = function (opcode) {
             //console.info("Calling GBA_SWI_REGISTER_RAM_RESET...");
             let regions = this.CPUCore.ARM.readRegister(0);
             if (regions & 0x01) {
-                Object.assign(this.CPUCore.memory.externalRAM, getUint8Array(0x40000));
-                Object.assign(this.CPUCore.memory.externalRAM16, getUint16View(this.CPUCore.memory.externalRAM)); //TODO: shouldn't need this 
-                Object.assign(this.CPUCore.memory.externalRAM32, getInt32View(this.CPUCore.memory.externalRAM)); //TODO: shouldn't need this
+                this.CPUCore.memory.externalRAM.fill(0, 0, 0x40000);
 		    }
             if (regions & 0x02) {
-                Object.assign(this.CPUCore.memory.internalRAM, getUint8Array(0x8000));
-                Object.assign(this.CPUCore.memory.internalRAM16, getUint16View(this.CPUCore.memory.internalRAM)); //TODO: shouldn't need this
-                Object.assign(this.CPUCore.memory.internalRAM32, getInt32View(this.CPUCore.memory.internalRAM)); //TODO: shouldn't need this
+                this.CPUCore.memory.internalRAM.fill(0, 0, 0x8000);
             }
             if (regions & 0x04) {
-                Object.assign(this.CPUCore.memory.gfxRenderer.renderer.paletteRAM, getUint8Array(0x400));
-                Object.assign(this.CPUCore.memory.gfxRenderer.renderer.paletteRAM16, getUint16View(this.CPUCore.memory.gfxRenderer.renderer.paletteRAM)); //TODO: shouldn't need this
-                Object.assign(this.CPUCore.memory.gfxRenderer.renderer.paletteRAM32, getInt32View(this.CPUCore.memory.gfxRenderer.renderer.paletteRAM)); //TODO: shouldn't need this
-            }
+                this.CPUCore.memory.gfxRenderer.renderer.paletteRAM.fill(0, 0, 0x400);}
             if (regions & 0x08) {
-                Object.assign(this.CPUCore.memory.gfxRenderer.renderer.VRAM, getUint8Array(0x18000));
-                Object.assign(this.CPUCore.memory.gfxRenderer.renderer.VRAM16, getUint16View(this.CPUCore.memory.gfxRenderer.renderer.VRAM)); //TODO: shouldn't need this
-                Object.assign(this.CPUCore.memory.gfxRenderer.renderer.VRAM32, getInt32View(this.CPUCore.memory.gfxRenderer.renderer.VRAM)); //TODO: shouldn't need this
+                this.CPUCore.memory.gfxRenderer.renderer.VRAM.fill(0, 0, 0x18000); 
             }
-            if (regions & 0x10) { this.warnUnimplementedCalls && console.warn("UNSUPPORTED GBA_SWI_REGISTER_RAM_RESET REGISTER: 0x10"); } // VIDEO OAM
+            if (regions & 0x10) { 
+                this.IOCore.gfxRenderer.renderer.objRenderer.OAMRAM.fill(0, 0x400)
+            } 
             if (regions & 0x1C) { this.warnUnimplementedCalls && console.warn("UNSUPPORTED GBA_SWI_REGISTER_RAM_RESET REGISTER: 0x1C"); } // POSSIBLY ALSO VRAM
             if (regions & 0x20) { this.warnUnimplementedCalls && console.warn("UNSUPPORTED GBA_SWI_REGISTER_RAM_RESET REGISTER: 0x20"); } // INPUT DATA?
             if (regions & 0x40) { this.warnUnimplementedCalls && console.warn("UNSUPPORTED GBA_SWI_REGISTER_RAM_RESET REGISTER: 0x40"); } // SOUND STUFF
