@@ -667,15 +667,14 @@ function SaveState(IOCore) {
 
 SaveState.prototype.assign = function (target, name, value) {
 
-
-    if (!target || !target[name]) 
+    if (!target || target[name] === undefined) 
     {
         return;
     }
 
     if (typeof target[name] == 'number' || typeof target[name] == 'boolean' || typeof target[name] == 'string') {
         target[name] = value;
-    } else {
+    } else if (target[name] !== null) {
         Object.assign(target[name], value);
     }
 
