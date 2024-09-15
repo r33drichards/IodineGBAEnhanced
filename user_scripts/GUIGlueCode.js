@@ -279,7 +279,65 @@ function registerGUIEvents() {
     //Run on init as well:
     createSavestateSlots(3);
     resizeCanvasFunc();
+    addEvent("click", document.getElementById("download_saves"), downloadAllQuicksaves);
+    addEvent("change", document.getElementById("upload_saves"), uploadQuicksaves);
+
 }
+
+function downloadAllQuicksaves() {
+    const saves = {};
+    for (let i = 1; i <= 3; i++) {
+        const save = IodineGUI.Iodine.saveStateManager.slot[i];
+        if (save) {
+            saves[`slot${i}`] = save;
+        }
+    }
+    
+    const blob = new Blob([JSON.stringify(saves)], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "quicksaves.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function uploadQuicksaves(e) {
+    // create a save state for each slot before uploading to initialize the slots
+
+
+    
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const saves = JSON.parse(e.target.result);
+            for (const [slot, save] of Object.entries(saves)) {
+                const slotNumber = parseInt(slot.replace('slot', ''));
+                if (slotNumber >= 1 && slotNumber <= 3) {
+                    IodineGUI.Iodine.saveStateManager.slot[slotNumber] = new SaveState(save);
+                    // IodineGUI.Iodine.saveStateManager.loadState(slotNumber);
+                    // Update the UI to reflect the loaded save
+                    document.getElementById(`ssSlot${slotNumber}`).classList.add("hide");
+                    document.getElementById(`lsSlot${slotNumber}`).classList.remove("hide");
+                    document.getElementById(`ssImg${slotNumber}`).src = save.screenshot;
+                }
+            }
+            writeRedTemporaryText("Quicksaves uploaded successfully");
+        } catch (error) {
+            console.error(error);
+            writeRedTemporaryText("Error uploading quicksaves: " + error.message);
+        }
+    };
+    reader.readAsText(file);
+}
+
+
 function registerDefaultSettings() {
     if (findValue("sound") === null) {
         setValue("sound", !!IodineGUI.defaults.sound);
