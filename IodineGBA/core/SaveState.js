@@ -1,6 +1,7 @@
 function SaveStateManager(Iodine) {
     this.Iodine = Iodine;
     this.slot = [];
+    this.iocore = []
 }
 
 SaveStateManager.prototype.saveState = function (slot) {
@@ -17,8 +18,9 @@ SaveStateManager.prototype.loadState = function (slot) {
     if (playing) this.Iodine.play();
 }
 
-function SaveState(IOCore) {
-
+function SaveState(arg) {
+    // this.IOCore = IOCore;   
+    if (arg.IOCore) {
     /* General */
     this.accumulatedClocks            = structuredClone(IOCore.accumulatedClocks            );
     this.cyclesOveriteratedPreviously = structuredClone(IOCore.cyclesOveriteratedPreviously );
@@ -663,6 +665,652 @@ function SaveState(IOCore) {
     this.EEPROMChip.largestSizePossible = structuredClone(IOCore.saves.EEPROMChip.largestSizePossible);                
     this.EEPROMChip.mode                = structuredClone(IOCore.saves.EEPROMChip.mode               ); 
     this.EEPROMChip.saves               = structuredClone(IOCore.saves.EEPROMChip.saves              );  
+    } else {
+        this.accumulatedClocks             = arg.accumulatedClocks            
+        this.cyclesOveriteratedPreviously  = arg.cyclesOveriteratedPreviously 
+        this.cyclesToIterate               = arg.cyclesToIterate              
+        this.graphicsClocks                = arg.graphicsClocks               
+        this.nextEventClocks               = arg.nextEventClocks              
+        this.systemStatus                  = arg.systemStatus                 
+        this.timerClocks                   = arg.timerClocks                  
+    
+        /* Memory */
+        this.internalRAM                = arg.internalRAM               
+        this.externalRAM                = arg.externalRAM               
+        this.WRAMControlFlags           = arg.WRAMControlFlags          
+        this.lastBIOSREAD               = arg.lastBIOSREAD              
+      
+        /* DMA */
+        this.dma = {};  
+        this.dma.currentMatch           = arg.dma.currentMatch          
+        this.dma.fetch                  = arg.dma.fetch                 
+    
+        this.dma0 = {}; 
+        this.dma0.destination           = arg.dma0.destination          
+        this.dma0.destinationControl    = arg.dma0.destinationControl   
+        this.dma0.destinationShadow     = arg.dma0.destinationShadow    
+        this.dma0.dmaType               = arg.dma0.dmaType              
+        this.dma0.enabled               = arg.dma0.enabled              
+        this.dma0.irqFlagging           = arg.dma0.irqFlagging          
+        this.dma0.is32Bit               = arg.dma0.is32Bit              
+        this.dma0.pending               = arg.dma0.pending              
+        this.dma0.repeat                = arg.dma0.repeat               
+        this.dma0.source                = arg.dma0.source               
+        this.dma0.sourceControl         = arg.dma0.sourceControl        
+        this.dma0.sourceShadow          = arg.dma0.sourceShadow         
+        this.dma0.wordCount             = arg.dma0.wordCount            
+        this.dma0.wordCountShadow       = arg.dma0.wordCountShadow      
+        
+        this.dma1 = {}; 
+        this.dma1.destination           = arg.dma1.destination          
+        this.dma1.destinationControl    = arg.dma1.destinationControl   
+        this.dma1.destinationShadow     = arg.dma1.destinationShadow    
+        this.dma1.dmaType               = arg.dma1.dmaType              
+        this.dma1.enabled               = arg.dma1.enabled              
+        this.dma1.irqFlagging           = arg.dma1.irqFlagging          
+        this.dma1.is32Bit               = arg.dma1.is32Bit              
+        this.dma1.pending               = arg.dma1.pending              
+        this.dma1.repeat                = arg.dma1.repeat               
+        this.dma1.source                = arg.dma1.source               
+        this.dma1.sourceControl         = arg.dma1.sourceControl        
+        this.dma1.sourceShadow          = arg.dma1.sourceShadow         
+        this.dma1.wordCount             = arg.dma1.wordCount            
+        this.dma1.wordCountShadow       = arg.dma1.wordCountShadow      
+    
+        this.dma2 = {}; 
+        this.dma2.destination           = arg.dma2.destination          
+        this.dma2.destinationControl    = arg.dma2.destinationControl   
+        this.dma2.destinationShadow     = arg.dma2.destinationShadow    
+        this.dma2.dmaType               = arg.dma2.dmaType              
+        this.dma2.enabled               = arg.dma2.enabled              
+        this.dma2.irqFlagging           = arg.dma2.irqFlagging          
+        this.dma2.is32Bit               = arg.dma2.is32Bit              
+        this.dma2.pending               = arg.dma2.pending              
+        this.dma2.repeat                = arg.dma2.repeat               
+        this.dma2.source                = arg.dma2.source               
+        this.dma2.sourceControl         = arg.dma2.sourceControl        
+        this.dma2.sourceShadow          = arg.dma2.sourceShadow         
+        this.dma2.wordCount             = arg.dma2.wordCount            
+        this.dma2.wordCountShadow       = arg.dma2.wordCountShadow      
+    
+        this.dma3 = {}; 
+        this.dma3.destination             = arg.dma3.destination            
+        this.dma3.destinationControl      = arg.dma3.destinationControl     
+        this.dma3.destinationShadow       = arg.dma3.destinationShadow      
+        this.dma3.displaySyncEnableDelay  = arg.dma3.displaySyncEnableDelay 
+        this.dma3.dmaType                 = arg.dma3.dmaType                
+        this.dma3.enabled                 = arg.dma3.enabled                
+        this.dma3.gamePakDMA              = arg.dma3.gamePakDMA             
+        this.dma3.irqFlagging             = arg.dma3.irqFlagging            
+        this.dma3.is32Bit                 = arg.dma3.is32Bit                
+        this.dma3.pending                 = arg.dma3.pending                
+        this.dma3.repeat                  = arg.dma3.repeat                 
+        this.dma3.source                  = arg.dma3.source                 
+        this.dma3.sourceControl           = arg.dma3.sourceControl          
+        this.dma3.sourceShadow            = arg.dma3.sourceShadow           
+        this.dma3.wordCount               = arg.dma3.wordCount              
+        this.dma3.wordCountShadow         = arg.dma3.wordCountShadow        
+        
+        /* CPU */               
+        this.registers                  = arg.registers                 
+        this.registersUSR               = arg.registersUSR              
+        this.registersFIQ               = arg.registersFIQ              
+        this.registersSVC               = arg.registersSVC              
+        this.registersABT               = arg.registersABT              
+        this.registersIRQ               = arg.registersIRQ              
+        this.registersUND               = arg.registersUND              
+        this.modeFlags                  = arg.modeFlags                 
+        this.SPSR                       = arg.SPSR                      
+        this.mul64ResultHigh            = arg.mul64ResultHigh           
+        this.mul64ResultLow             = arg.mul64ResultLow            
+        this.triggeredIRQ               = arg.triggeredIRQ              
+    
+        this.THUMB = {};
+        this.THUMB.decode               = arg.THUMB.decode              
+        this.THUMB.execute              = arg.THUMB.execute             
+        this.THUMB.fetch                = arg.THUMB.fetch               
+    
+        this.ARM = {};
+        this.ARM.decode                 = arg.ARM.decode                
+        this.ARM.execute                = arg.ARM.execute               
+        this.ARM.fetch                  = arg.ARM.fetch                 
+             
+        /* Timers */         
+        this.timer0Counter              = arg.timer0Counter             
+        this.timer0Reload               = arg.timer0Reload              
+        this.timer0Control              = arg.timer0Control             
+        this.timer0Enabled              = arg.timer0Enabled             
+        this.timer0IRQ                  = arg.timer0IRQ                 
+        this.timer0Precounter           = arg.timer0Precounter          
+        this.timer0Prescalar            = arg.timer0Prescalar           
+        this.timer0PrescalarShifted     = arg.timer0PrescalarShifted    
+        this.timer1Counter              = arg.timer1Counter             
+        this.timer1Reload               = arg.timer1Reload              
+        this.timer1Control              = arg.timer1Control             
+        this.timer1Enabled              = arg.timer1Enabled             
+        this.timer1IRQ                  = arg.timer1IRQ                 
+        this.timer1Precounter           = arg.timer1Precounter          
+        this.timer1Prescalar            = arg.timer1Prescalar           
+        this.timer1PrescalarShifted     = arg.timer1PrescalarShifted    
+        this.timer1CountUp              = arg.timer1CountUp             
+        this.timer2Counter              = arg.timer2Counter             
+        this.timer2Reload               = arg.timer2Reload              
+        this.timer2Control              = arg.timer2Control             
+        this.timer2Enabled              = arg.timer2Enabled             
+        this.timer2IRQ                  = arg.timer2IRQ                 
+        this.timer2Precounter           = arg.timer2Precounter          
+        this.timer2Prescalar            = arg.timer2Prescalar           
+        this.timer2PrescalarShifted     = arg.timer2PrescalarShifted    
+        this.timer2CountUp              = arg.timer2CountUp             
+        this.timer3Counter              = arg.timer3Counter             
+        this.timer3Reload               = arg.timer3Reload              
+        this.timer3Control              = arg.timer3Control             
+        this.timer3Enabled              = arg.timer3Enabled             
+        this.timer3IRQ                  = arg.timer3IRQ                 
+        this.timer3Precounter           = arg.timer3Precounter          
+        this.timer3Prescalar            = arg.timer3Prescalar           
+        this.timer3PrescalarShifted     = arg.timer3PrescalarShifted    
+        this.timer3CountUp              = arg.timer3CountUp             
+        this.timer1UseMainClocks        = arg.timer1UseMainClocks       
+        this.timer1UseChainedClocks     = arg.timer1UseChainedClocks    
+        this.timer2UseMainClocks        = arg.timer2UseMainClocks       
+        this.timer2UseChainedClocks     = arg.timer2UseChainedClocks    
+        this.timer3UseMainClocks        = arg.timer3UseMainClocks       
+        this.timer3UseChainedClocks     = arg.timer3UseChainedClocks    
+       
+        /* Wait */   
+        this.WRAMConfiguration          = arg.WRAMConfiguration         
+        this.WRAMWaitState              = arg.WRAMWaitState             
+        this.SRAMWaitState              = arg.SRAMWaitState             
+        this.WAITCNT0                   = arg.WAITCNT0                  
+        this.WAITCNT1                   = arg.WAITCNT1                  
+        this.POSTBOOT                   = arg.POSTBOOT                  
+        this.isRendering                = arg.isRendering               
+        this.isOAMRendering             = arg.isOAMRendering            
+        this.nonSequential              = arg.nonSequential             
+        this.buffer                     = arg.buffer                    
+        this.clocks                     = arg.clocks                    
+    
+    
+        /* Serial */
+        this.SIODATA_A                  = arg.SIODATA_A                 
+        this.SIODATA_B                  = arg.SIODATA_B                 
+        this.SIODATA_C                  = arg.SIODATA_C                 
+        this.SIODATA_D                  = arg.SIODATA_D                 
+        this.SIOShiftClockExternal      = arg.SIOShiftClockExternal     
+        this.SIOShiftClockDivider       = arg.SIOShiftClockDivider      
+        this.SIOCNT0_DATA               = arg.SIOCNT0_DATA              
+        this.SIOTransferStarted         = arg.SIOTransferStarted        
+        this.SIOMULT_PLAYER_NUMBER      = arg.SIOMULT_PLAYER_NUMBER     
+        this.SIOCOMMERROR               = arg.SIOCOMMERROR              
+        this.SIOBaudRate                = arg.SIOBaudRate               
+        this.SIOCNT_UART_CTS            = arg.SIOCNT_UART_CTS           
+        this.SIOCNT_UART_MISC           = arg.SIOCNT_UART_MISC          
+        this.SIOCNT_UART_FIFO           = arg.SIOCNT_UART_FIFO          
+        this.SIOCNT_IRQ                 = arg.SIOCNT_IRQ                
+        this.SIOCNT_MODE                = arg.SIOCNT_MODE               
+        this.SIOCNT_UART_RECV_ENABLE    = arg.SIOCNT_UART_RECV_ENABLE   
+        this.SIOCNT_UART_SEND_ENABLE    = arg.SIOCNT_UART_SEND_ENABLE   
+        this.SIOCNT_UART_PARITY_ENABLE  = arg.SIOCNT_UART_PARITY_ENABLE 
+        this.SIOCNT_UART_FIFO_ENABLE    = arg.SIOCNT_UART_FIFO_ENABLE   
+        this.SIODATA8                   = arg.SIODATA8                  
+        this.RCNTMode                   = arg.RCNTMode                  
+        this.RCNTIRQ                    = arg.RCNTIRQ                   
+        this.RCNTDataBits               = arg.RCNTDataBits              
+        this.RCNTDataBitFlow            = arg.RCNTDataBitFlow           
+        this.JOYBUS_IRQ                 = arg.JOYBUS_IRQ                
+        this.JOYBUS_CNTL_FLAGS          = arg.JOYBUS_CNTL_FLAGS         
+        this.JOYBUS_RECV0               = arg.JOYBUS_RECV0              
+        this.JOYBUS_RECV1               = arg.JOYBUS_RECV1              
+        this.JOYBUS_RECV2               = arg.JOYBUS_RECV2              
+        this.JOYBUS_RECV3               = arg.JOYBUS_RECV3              
+        this.JOYBUS_SEND0               = arg.JOYBUS_SEND0              
+        this.JOYBUS_SEND1               = arg.JOYBUS_SEND1              
+        this.JOYBUS_SEND2               = arg.JOYBUS_SEND2              
+        this.JOYBUS_SEND3               = arg.JOYBUS_SEND3              
+        this.JOYBUS_STAT                = arg.JOYBUS_STAT               
+        this.shiftClocks                = arg.shiftClocks               
+        this.serialBitsShifted          = arg.serialBitsShifted         
+    
+        /* Run Loop */
+        this.systemStatus                   = arg.systemStatus                  
+        this.cyclesToIterate                = arg.cyclesToIterate               
+        this.cyclesOveriteratedPreviously   = arg.cyclesOveriteratedPreviously  
+        this.accumulatedClocks              = arg.accumulatedClocks             
+        this.graphicsClocks                 = arg.graphicsClocks                
+        this.timerClocks                    = arg.timerClocks                   
+        this.serialClocks                   = arg.serialClocks                  
+        this.nextEventClocks                = arg.nextEventClocks               
+    
+        /* IRQ */
+        this.interruptsEnabled              = arg.interruptsEnabled             
+        this.interruptsRequested            = arg.interruptsRequested           
+        this.IME                            = arg.IME                           
+    
+        /* Video */
+        this.renderedScanLine               = arg.renderedScanLine              
+        this.statusFlags                    = arg.statusFlags                   
+        this.IRQFlags                       = arg.IRQFlags                      
+        this.VCounter                       = arg.VCounter                      
+        this.currentScanLine                = arg.currentScanLine               
+        this.LCDTicks                       = arg.LCDTicks                      
+    
+        this.IOData8                        = arg.IOData8                       
+    
+        this.renderer = {};
+        this.renderer.displayControl                 = arg.renderer.displayControl                
+        this.renderer.display                        = arg.renderer.display                       
+        this.renderer.greenSwap                      = arg.renderer.greenSwap                     
+        this.renderer.WINOutside                     = arg.renderer.WINOutside                    
+        this.renderer.paletteRAM                     = arg.renderer.paletteRAM                    
+        this.renderer.VRAM                           = arg.renderer.VRAM                          
+        this.renderer.buffer                         = arg.renderer.buffer                        
+        this.renderer.frameBuffer                    = arg.renderer.frameBuffer                   
+        this.renderer.swizzledFrame                  = arg.renderer.swizzledFrame                 
+        this.renderer.totalLinesPassed               = arg.renderer.totalLinesPassed              
+        this.renderer.queuedScanLines                = arg.renderer.queuedScanLines               
+        this.renderer.lastUnrenderedLine             = arg.renderer.lastUnrenderedLine            
+        this.renderer.backdrop                       = arg.renderer.backdrop                      
+        this.renderer.palette256                     = arg.renderer.palette256                    
+        this.renderer.paletteOBJ256                  = arg.renderer.paletteOBJ256                 
+        this.renderer.palette16                      = arg.renderer.palette16                     
+        this.renderer.paletteOBJ16                   = arg.renderer.paletteOBJ16                  
+        
+        this.renderer.lineBuffer                     = arg.renderer.lineBuffer                    
+    
+        this.renderer.compositor = {};
+        this.renderer.compositor.buffer              = arg.renderer.compositor.buffer             
+        this.renderer.compositor.doEffects           = arg.renderer.compositor.doEffects          
+    
+        this.renderer.bg0Renderer = {};
+        this.renderer.bg0Renderer.BGCharacterBaseBlock   = arg.renderer.bg0Renderer.BGCharacterBaseBlock  
+        this.renderer.bg0Renderer.BGLayer                = arg.renderer.bg0Renderer.BGLayer               
+        this.renderer.bg0Renderer.BGScreenBaseBlock      = arg.renderer.bg0Renderer.BGScreenBaseBlock     
+        this.renderer.bg0Renderer.BGXCoord               = arg.renderer.bg0Renderer.BGXCoord              
+        this.renderer.bg0Renderer.BGYCoord               = arg.renderer.bg0Renderer.BGYCoord              
+        this.renderer.bg0Renderer.do256                  = arg.renderer.bg0Renderer.do256                 
+        this.renderer.bg0Renderer.doMosaic               = arg.renderer.bg0Renderer.doMosaic              
+        this.renderer.bg0Renderer.offset                 = arg.renderer.bg0Renderer.offset                
+        this.renderer.bg0Renderer.priorityFlag           = arg.renderer.bg0Renderer.priorityFlag          
+        this.renderer.bg0Renderer.tileFetched            = arg.renderer.bg0Renderer.tileFetched           
+        this.renderer.bg0Renderer.tileMode               = arg.renderer.bg0Renderer.tileMode              
+    
+        this.renderer.bg1Renderer = {};
+        this.renderer.bg1Renderer.BGCharacterBaseBlock   = arg.renderer.bg1Renderer.BGCharacterBaseBlock  
+        this.renderer.bg1Renderer.BGLayer                = arg.renderer.bg1Renderer.BGLayer               
+        this.renderer.bg1Renderer.BGScreenBaseBlock      = arg.renderer.bg1Renderer.BGScreenBaseBlock     
+        this.renderer.bg1Renderer.BGXCoord               = arg.renderer.bg1Renderer.BGXCoord              
+        this.renderer.bg1Renderer.BGYCoord               = arg.renderer.bg1Renderer.BGYCoord              
+        this.renderer.bg1Renderer.do256                  = arg.renderer.bg1Renderer.do256                 
+        this.renderer.bg1Renderer.doMosaic               = arg.renderer.bg1Renderer.doMosaic              
+        this.renderer.bg1Renderer.offset                 = arg.renderer.bg1Renderer.offset                
+        this.renderer.bg1Renderer.priorityFlag           = arg.renderer.bg1Renderer.priorityFlag          
+        this.renderer.bg1Renderer.tileFetched            = arg.renderer.bg1Renderer.tileFetched           
+        this.renderer.bg1Renderer.tileMode               = arg.renderer.bg1Renderer.tileMode              
+    
+        this.renderer.bg2TextRenderer = {};
+        this.renderer.bg2TextRenderer.BGCharacterBaseBlock   = arg.renderer.bg2TextRenderer.BGCharacterBaseBlock  
+        this.renderer.bg2TextRenderer.BGLayer                = arg.renderer.bg2TextRenderer.BGLayer               
+        this.renderer.bg2TextRenderer.BGScreenBaseBlock      = arg.renderer.bg2TextRenderer.BGScreenBaseBlock     
+        this.renderer.bg2TextRenderer.BGXCoord               = arg.renderer.bg2TextRenderer.BGXCoord              
+        this.renderer.bg2TextRenderer.BGYCoord               = arg.renderer.bg2TextRenderer.BGYCoord              
+        this.renderer.bg2TextRenderer.do256                  = arg.renderer.bg2TextRenderer.do256                 
+        this.renderer.bg2TextRenderer.doMosaic               = arg.renderer.bg2TextRenderer.doMosaic              
+        this.renderer.bg2TextRenderer.offset                 = arg.renderer.bg2TextRenderer.offset                
+        this.renderer.bg2TextRenderer.priorityFlag           = arg.renderer.bg2TextRenderer.priorityFlag          
+        this.renderer.bg2TextRenderer.tileFetched            = arg.renderer.bg2TextRenderer.tileFetched           
+        this.renderer.bg2TextRenderer.tileMode               = arg.renderer.bg2TextRenderer.tileMode              
+    
+        this.renderer.bg3TextRenderer = {};
+        this.renderer.bg3TextRenderer.BGCharacterBaseBlock   = arg.renderer.bg3TextRenderer.BGCharacterBaseBlock  
+        this.renderer.bg3TextRenderer.BGLayer                = arg.renderer.bg3TextRenderer.BGLayer               
+        this.renderer.bg3TextRenderer.BGScreenBaseBlock      = arg.renderer.bg3TextRenderer.BGScreenBaseBlock     
+        this.renderer.bg3TextRenderer.BGXCoord               = arg.renderer.bg3TextRenderer.BGXCoord              
+        this.renderer.bg3TextRenderer.BGYCoord               = arg.renderer.bg3TextRenderer.BGYCoord              
+        this.renderer.bg3TextRenderer.do256                  = arg.renderer.bg3TextRenderer.do256                 
+        this.renderer.bg3TextRenderer.doMosaic               = arg.renderer.bg3TextRenderer.doMosaic              
+        this.renderer.bg3TextRenderer.offset                 = arg.renderer.bg3TextRenderer.offset                
+        this.renderer.bg3TextRenderer.priorityFlag           = arg.renderer.bg3TextRenderer.priorityFlag          
+        this.renderer.bg3TextRenderer.tileFetched            = arg.renderer.bg3TextRenderer.tileFetched           
+        this.renderer.bg3TextRenderer.tileMode               = arg.renderer.bg3TextRenderer.tileMode              
+    
+        this.renderer.bgAffineRenderer0 = {};
+        this.renderer.bgAffineRenderer0.BGLayer              = arg.renderer.bgAffineRenderer0.BGLayer             
+        this.renderer.bgAffineRenderer0.BGReferenceX         = arg.renderer.bgAffineRenderer0.BGReferenceX        
+        this.renderer.bgAffineRenderer0.BGReferenceY         = arg.renderer.bgAffineRenderer0.BGReferenceY        
+        this.renderer.bgAffineRenderer0.BGdmx                = arg.renderer.bgAffineRenderer0.BGdmx               
+        this.renderer.bgAffineRenderer0.BGdmy                = arg.renderer.bgAffineRenderer0.BGdmy               
+        this.renderer.bgAffineRenderer0.BGdx                 = arg.renderer.bgAffineRenderer0.BGdx                
+        this.renderer.bgAffineRenderer0.BGdy                 = arg.renderer.bgAffineRenderer0.BGdy                
+        this.renderer.bgAffineRenderer0.doMosaic             = arg.renderer.bgAffineRenderer0.doMosaic            
+        this.renderer.bgAffineRenderer0.offset               = arg.renderer.bgAffineRenderer0.offset              
+        this.renderer.bgAffineRenderer0.pb                   = arg.renderer.bgAffineRenderer0.pb                  
+        this.renderer.bgAffineRenderer0.pd                   = arg.renderer.bgAffineRenderer0.pd                  
+        this.renderer.bgAffineRenderer0.priorityFlag         = arg.renderer.bgAffineRenderer0.priorityFlag        
+        
+        this.renderer.bgAffineRenderer1 = {};
+        this.renderer.bgAffineRenderer1.BGLayer              = arg.renderer.bgAffineRenderer1.BGLayer             
+        this.renderer.bgAffineRenderer1.BGReferenceX         = arg.renderer.bgAffineRenderer1.BGReferenceX        
+        this.renderer.bgAffineRenderer1.BGReferenceY         = arg.renderer.bgAffineRenderer1.BGReferenceY        
+        this.renderer.bgAffineRenderer1.BGdmx                = arg.renderer.bgAffineRenderer1.BGdmx               
+        this.renderer.bgAffineRenderer1.BGdmy                = arg.renderer.bgAffineRenderer1.BGdmy               
+        this.renderer.bgAffineRenderer1.BGdx                 = arg.renderer.bgAffineRenderer1.BGdx                
+        this.renderer.bgAffineRenderer1.BGdy                 = arg.renderer.bgAffineRenderer1.BGdy                
+        this.renderer.bgAffineRenderer1.doMosaic             = arg.renderer.bgAffineRenderer1.doMosaic            
+        this.renderer.bgAffineRenderer1.offset               = arg.renderer.bgAffineRenderer1.offset              
+        this.renderer.bgAffineRenderer1.pb                   = arg.renderer.bgAffineRenderer1.pb                  
+        this.renderer.bgAffineRenderer1.pd                   = arg.renderer.bgAffineRenderer1.pd                  
+        this.renderer.bgAffineRenderer1.priorityFlag         = arg.renderer.bgAffineRenderer1.priorityFlag        
+    
+        this.renderer.bg2FrameBufferRenderer = {};
+        this.renderer.bg2FrameBufferRenderer.frameSelect     = arg.renderer.bg2FrameBufferRenderer.frameSelect    
+    
+        this.renderer.bg2MatrixRenderer = {};
+        this.renderer.bg2MatrixRenderer.BGCharacterBaseBlock  = arg.renderer.bg2MatrixRenderer.BGCharacterBaseBlock 
+        this.renderer.bg2MatrixRenderer.BGDisplayOverflow     = arg.renderer.bg2MatrixRenderer.BGDisplayOverflow    
+        this.renderer.bg2MatrixRenderer.BGScreenBaseBlock     = arg.renderer.bg2MatrixRenderer.BGScreenBaseBlock    
+        this.renderer.bg2MatrixRenderer.mapSize               = arg.renderer.bg2MatrixRenderer.mapSize              
+        this.renderer.bg2MatrixRenderer.mapSizeComparer       = arg.renderer.bg2MatrixRenderer.mapSizeComparer      
+    
+        this.renderer.bg3MatrixRenderer = {};
+        this.renderer.bg3MatrixRenderer.BGCharacterBaseBlock  = arg.renderer.bg3MatrixRenderer.BGCharacterBaseBlock 
+        this.renderer.bg3MatrixRenderer.BGDisplayOverflow     = arg.renderer.bg3MatrixRenderer.BGDisplayOverflow    
+        this.renderer.bg3MatrixRenderer.BGScreenBaseBlock     = arg.renderer.bg3MatrixRenderer.BGScreenBaseBlock    
+        this.renderer.bg3MatrixRenderer.mapSize               = arg.renderer.bg3MatrixRenderer.mapSize              
+        this.renderer.bg3MatrixRenderer.mapSizeComparer       = arg.renderer.bg3MatrixRenderer.mapSizeComparer      
+    
+        this.renderer.colorEffectsRenderer = {};
+        this.renderer.colorEffectsRenderer.alphaBlendAmountTarget1  = arg.renderer.colorEffectsRenderer.alphaBlendAmountTarget1 
+        this.renderer.colorEffectsRenderer.alphaBlendAmountTarget2  = arg.renderer.colorEffectsRenderer.alphaBlendAmountTarget2 
+        this.renderer.colorEffectsRenderer.brightnessEffectAmount   = arg.renderer.colorEffectsRenderer.brightnessEffectAmount  
+        this.renderer.colorEffectsRenderer.colorEffectsType         = arg.renderer.colorEffectsRenderer.colorEffectsType        
+        this.renderer.colorEffectsRenderer.effectsTarget1           = arg.renderer.colorEffectsRenderer.effectsTarget1          
+        this.renderer.colorEffectsRenderer.effectsTarget2           = arg.renderer.colorEffectsRenderer.effectsTarget2          
+    
+        this.renderer.mosaicRenderer = {};
+        this.renderer.mosaicRenderer.BGMosaicHSize                  = arg.renderer.mosaicRenderer.BGMosaicHSize                 
+        this.renderer.mosaicRenderer.BGMosaicVSize                  = arg.renderer.mosaicRenderer.BGMosaicVSize                 
+        this.renderer.mosaicRenderer.OBJMosaicHSize                 = arg.renderer.mosaicRenderer.OBJMosaicHSize                
+        this.renderer.mosaicRenderer.OBJMosaicVSize                 = arg.renderer.mosaicRenderer.OBJMosaicVSize                
+    
+        this.renderer.objRenderer = {};
+        this.renderer.objRenderer.cyclesToRender                    = arg.renderer.objRenderer.cyclesToRender                   
+        this.renderer.objRenderer.OAMRAM                            = arg.renderer.objRenderer.OAMRAM                           
+        this.renderer.objRenderer.scratchBuffer                     = arg.renderer.objRenderer.scratchBuffer                    
+        this.renderer.objRenderer.scratchWindowBuffer               = arg.renderer.objRenderer.scratchWindowBuffer              
+        this.renderer.objRenderer.scratchOBJBuffer                  = arg.renderer.objRenderer.scratchOBJBuffer                 
+        this.renderer.objRenderer.OBJMatrixParameters               = arg.renderer.objRenderer.OBJMatrixParameters              
+    
+        this.renderer.objWindowRenderer = {};
+        this.renderer.objWindowRenderer.WINOBJOutside               = arg.renderer.objWindowRenderer.WINOBJOutside              
+    
+        this.renderer.window0Renderer = {};
+        this.renderer.window0Renderer.WINXCoordLeft                 = arg.renderer.window0Renderer.WINXCoordLeft                
+        this.renderer.window0Renderer.WINXCoordRight                = arg.renderer.window0Renderer.WINXCoordRight               
+        this.renderer.window0Renderer.WINYCoordBottom               = arg.renderer.window0Renderer.WINYCoordBottom              
+        this.renderer.window0Renderer.WINYCoordTop                  = arg.renderer.window0Renderer.WINYCoordTop                 
+        this.renderer.window0Renderer.windowDisplayControl          = arg.renderer.window0Renderer.windowDisplayControl         
+    
+        this.renderer.window1Renderer = {};
+        this.renderer.window1Renderer.WINXCoordLeft                 = arg.renderer.window1Renderer.WINXCoordLeft                
+        this.renderer.window1Renderer.WINXCoordRight                = arg.renderer.window1Renderer.WINXCoordRight               
+        this.renderer.window1Renderer.WINYCoordBottom               = arg.renderer.window1Renderer.WINYCoordBottom              
+        this.renderer.window1Renderer.WINYCoordTop                  = arg.renderer.window1Renderer.WINYCoordTop                 
+        this.renderer.window1Renderer.windowDisplayControl          = arg.renderer.window1Renderer.windowDisplayControl         
+    
+        /* Audio */
+        this.AGBDirectSoundA                     = arg.AGBDirectSoundA                    
+        this.AGBDirectSoundAFolded               = arg.AGBDirectSoundAFolded              
+        this.AGBDirectSoundALeftCanPlay          = arg.AGBDirectSoundALeftCanPlay         
+        this.AGBDirectSoundARightCanPlay         = arg.AGBDirectSoundARightCanPlay        
+        this.AGBDirectSoundAShifter              = arg.AGBDirectSoundAShifter             
+        this.AGBDirectSoundATimer                = arg.AGBDirectSoundATimer               
+        this.AGBDirectSoundB                     = arg.AGBDirectSoundB                    
+        this.AGBDirectSoundBFolded               = arg.AGBDirectSoundBFolded              
+        this.AGBDirectSoundBLeftCanPlay          = arg.AGBDirectSoundBLeftCanPlay         
+        this.AGBDirectSoundBRightCanPlay         = arg.AGBDirectSoundBRightCanPlay        
+        this.AGBDirectSoundBShifter              = arg.AGBDirectSoundBShifter             
+        this.AGBDirectSoundBTimer                = arg.AGBDirectSoundBTimer               
+        this.CGBMixerOutputCacheLeft             = arg.CGBMixerOutputCacheLeft            
+        this.CGBMixerOutputCacheLeftFolded       = arg.CGBMixerOutputCacheLeftFolded      
+        this.CGBMixerOutputCacheRight            = arg.CGBMixerOutputCacheRight           
+        this.CGBMixerOutputCacheRightFolded      = arg.CGBMixerOutputCacheRightFolded     
+        this.CGBOutputRatio                      = arg.CGBOutputRatio                     
+        this.PWMBitDepthMask                     = arg.PWMBitDepthMask                    
+        this.PWMBitDepthMaskShadow               = arg.PWMBitDepthMaskShadow              
+        this.PWMWidth                            = arg.PWMWidth                           
+        this.PWMWidthOld                         = arg.PWMWidthOld                        
+        this.PWMWidthShadow                      = arg.PWMWidthShadow                     
+        this.VinLeftChannelMasterVolume          = arg.VinLeftChannelMasterVolume         
+        this.VinRightChannelMasterVolume         = arg.VinRightChannelMasterVolume        
+        this.audioClocksUntilNextEvent           = arg.audioClocksUntilNextEvent          
+        this.audioClocksUntilNextEventCounter    = arg.audioClocksUntilNextEventCounter   
+        this.audioIndex                          = arg.audioIndex                         
+        this.audioResamplerFirstPassFactor       = arg.audioResamplerFirstPassFactor      
+        this.audioTicks                          = arg.audioTicks                         
+        this.downsampleInputLeft                 = arg.downsampleInputLeft                
+        this.downsampleInputRight                = arg.downsampleInputRight               
+        this.mixerOutputCacheLeft                = arg.mixerOutputCacheLeft               
+        this.mixerOutputCacheRight               = arg.mixerOutputCacheRight              
+        this.mixerSoundBIAS                      = arg.mixerSoundBIAS                     
+        this.nr50                                = arg.nr50                               
+        this.nr51                                = arg.nr51                               
+        this.nr52                                = arg.nr52                               
+        this.nr60                                = arg.nr60                               
+        this.nr61                                = arg.nr61                               
+        this.nr62                                = arg.nr62                               
+        this.nr63                                = arg.nr63                               
+        this.sequencePosition                    = arg.sequencePosition                   
+        this.sequencerClocks                     = arg.sequencerClocks                    
+        this.soundMasterEnabled                  = arg.soundMasterEnabled                 
+    
+        this.channel1 = {}; 
+        this.channel1.CachedDuty                 = arg.channel1.CachedDuty                
+        this.channel1.DutyTracker                = arg.channel1.DutyTracker               
+        this.channel1.Enabled                    = arg.channel1.Enabled                   
+        this.channel1.FrequencyCounter           = arg.channel1.FrequencyCounter          
+        this.channel1.FrequencyTracker           = arg.channel1.FrequencyTracker          
+        this.channel1.ShadowFrequency            = arg.channel1.ShadowFrequency           
+        this.channel1.SweepFault                 = arg.channel1.SweepFault                
+        this.channel1.Swept                      = arg.channel1.Swept                     
+        this.channel1.canPlay                    = arg.channel1.canPlay                   
+        this.channel1.consecutive                = arg.channel1.consecutive               
+        this.channel1.currentSampleLeft          = arg.channel1.currentSampleLeft         
+        this.channel1.currentSampleRight         = arg.channel1.currentSampleRight        
+        this.channel1.decreaseSweep              = arg.channel1.decreaseSweep             
+        this.channel1.envelopeSweeps             = arg.channel1.envelopeSweeps            
+        this.channel1.envelopeSweepsLast         = arg.channel1.envelopeSweepsLast        
+        this.channel1.envelopeType               = arg.channel1.envelopeType              
+        this.channel1.envelopeVolume             = arg.channel1.envelopeVolume            
+        this.channel1.frequency                  = arg.channel1.frequency                 
+        this.channel1.frequencySweepDivider      = arg.channel1.frequencySweepDivider     
+        this.channel1.lastTimeSweep              = arg.channel1.lastTimeSweep             
+        this.channel1.leftEnable                 = arg.channel1.leftEnable                
+        this.channel1.nr10                       = arg.channel1.nr10                      
+        this.channel1.nr11                       = arg.channel1.nr11                      
+        this.channel1.nr12                       = arg.channel1.nr12                      
+        this.channel1.nr14                       = arg.channel1.nr14                      
+        this.channel1.rightEnable                = arg.channel1.rightEnable               
+        this.channel1.timeSweep                  = arg.channel1.timeSweep                 
+        this.channel1.totalLength                = arg.channel1.totalLength               
+    
+        this.channel2 = {};
+        this.channel2.CachedDuty                 = arg.channel2.CachedDuty                
+        this.channel2.DutyTracker                = arg.channel2.DutyTracker               
+        this.channel2.Enabled                    = arg.channel2.Enabled                   
+        this.channel2.FrequencyCounter           = arg.channel2.FrequencyCounter          
+        this.channel2.FrequencyTracker           = arg.channel2.FrequencyTracker          
+        this.channel2.ShadowFrequency            = arg.channel2.ShadowFrequency           
+        this.channel2.canPlay                    = arg.channel2.canPlay                   
+        this.channel2.consecutive                = arg.channel2.consecutive               
+        this.channel2.currentSampleLeft          = arg.channel2.currentSampleLeft         
+        this.channel2.currentSampleRight         = arg.channel2.currentSampleRight        
+        this.channel2.envelopeSweeps             = arg.channel2.envelopeSweeps            
+        this.channel2.envelopeSweepsLast         = arg.channel2.envelopeSweepsLast        
+        this.channel2.envelopeType               = arg.channel2.envelopeType              
+        this.channel2.envelopeVolume             = arg.channel2.envelopeVolume            
+        this.channel2.frequency                  = arg.channel2.frequency                 
+        this.channel2.leftEnable                 = arg.channel2.leftEnable                
+        this.channel2.nr21                       = arg.channel2.nr21                      
+        this.channel2.nr22                       = arg.channel2.nr22                      
+        this.channel2.nr23                       = arg.channel2.nr23                      
+        this.channel2.nr24                       = arg.channel2.nr24                      
+        this.channel2.rightEnable                = arg.channel2.rightEnable               
+        this.channel2.totalLength                = arg.channel2.totalLength               
+    
+        this.channel3 = {};
+        this.channel3.Enabled                    = arg.channel3.Enabled                   
+        this.channel3.FrequencyPeriod            = arg.channel3.FrequencyPeriod           
+        this.channel3.PCM                        = arg.channel3.PCM                       
+        this.channel3.WAVERAM8                   = arg.channel3.WAVERAM8                  
+        this.channel3.WAVERAMBankAccessed        = arg.channel3.WAVERAMBankAccessed       
+        this.channel3.WAVERAMBankSpecified       = arg.channel3.WAVERAMBankSpecified      
+        this.channel3.WaveRAMBankSize            = arg.channel3.WaveRAMBankSize           
+        this.channel3.cachedSample               = arg.channel3.cachedSample              
+        this.channel3.canPlay                    = arg.channel3.canPlay                   
+        this.channel3.consecutive                = arg.channel3.consecutive               
+        this.channel3.counter                    = arg.channel3.counter                   
+        this.channel3.currentSampleLeft          = arg.channel3.currentSampleLeft         
+        this.channel3.currentSampleRight         = arg.channel3.currentSampleRight        
+        this.channel3.frequency                  = arg.channel3.frequency                 
+        this.channel3.lastSampleLookup           = arg.channel3.lastSampleLookup          
+        this.channel3.leftEnable                 = arg.channel3.leftEnable                
+        this.channel3.nr30                       = arg.channel3.nr30                      
+        this.channel3.nr31                       = arg.channel3.nr31                      
+        this.channel3.nr32                       = arg.channel3.nr32                      
+        this.channel3.nr33                       = arg.channel3.nr33                      
+        this.channel3.nr34                       = arg.channel3.nr34                      
+        this.channel3.patternType                = arg.channel3.patternType               
+        this.channel3.rightEnable                = arg.channel3.rightEnable               
+        this.channel3.totalLength                = arg.channel3.totalLength               
+    
+        // LSFR7Table
+        // LSFR15Table
+        this.channel4 = {};
+        this.channel4.BitRange                   = arg.channel4.BitRange                  
+        this.channel4.Enabled                    = arg.channel4.Enabled                   
+        this.channel4.FrequencyPeriod            = arg.channel4.FrequencyPeriod           
+        this.channel4.VolumeShifter              = arg.channel4.VolumeShifter             
+        this.channel4.cachedSample               = arg.channel4.cachedSample              
+        this.channel4.canPlay                    = arg.channel4.canPlay                   
+        this.channel4.consecutive                = arg.channel4.consecutive               
+        this.channel4.counter                    = arg.channel4.counter                   
+        this.channel4.currentSampleLeft          = arg.channel4.currentSampleLeft         
+        this.channel4.currentSampleRight         = arg.channel4.currentSampleRight        
+        this.channel4.currentVolume              = arg.channel4.currentVolume             
+        this.channel4.envelopeSweeps             = arg.channel4.envelopeSweeps            
+        this.channel4.envelopeSweepsLast         = arg.channel4.envelopeSweepsLast        
+        this.channel4.envelopeType               = arg.channel4.envelopeType              
+        this.channel4.envelopeVolume             = arg.channel4.envelopeVolume            
+        this.channel4.lastSampleLookup           = arg.channel4.lastSampleLookup          
+        this.channel4.leftEnable                 = arg.channel4.leftEnable                
+        this.channel4.noiseSampleTable           = arg.channel4.noiseSampleTable          
+        this.channel4.nr42                       = arg.channel4.nr42                      
+        this.channel4.nr43                       = arg.channel4.nr43                      
+        this.channel4.nr44                       = arg.channel4.nr44                      
+        this.channel4.rightEnable                = arg.channel4.rightEnable               
+        this.channel4.totalLength                = arg.channel4.totalLength               
+    
+        this.FIFOA = {};
+        this.FIFOA.buffer                        = arg.FIFOA.buffer                       
+        this.FIFOA.count                         = arg.FIFOA.count                        
+        this.FIFOA.position                      = arg.FIFOA.position                     
+    
+        this.FIFOB = {};
+        this.FIFOB.buffer                        = arg.FIFOB.buffer                       
+        this.FIFOB.count                         = arg.FIFOB.count                        
+        this.FIFOB.position                      = arg.FIFOB.position                     
+    
+        /* Serial */
+        this.JOYBUS_CNTL_FLAGS              = arg.JOYBUS_CNTL_FLAGS             
+        this.JOYBUS_IRQ                     = arg.JOYBUS_IRQ                    
+        this.JOYBUS_RECV0                   = arg.JOYBUS_RECV0                  
+        this.JOYBUS_RECV1                   = arg.JOYBUS_RECV1                  
+        this.JOYBUS_RECV2                   = arg.JOYBUS_RECV2                  
+        this.JOYBUS_RECV3                   = arg.JOYBUS_RECV3                  
+        this.JOYBUS_SEND0                   = arg.JOYBUS_SEND0                  
+        this.JOYBUS_SEND1                   = arg.JOYBUS_SEND1                  
+        this.JOYBUS_SEND2                   = arg.JOYBUS_SEND2                  
+        this.JOYBUS_SEND3                   = arg.JOYBUS_SEND3                  
+        this.JOYBUS_STAT                    = arg.JOYBUS_STAT                   
+        this.RCNTDataBitFlow                = arg.RCNTDataBitFlow               
+        this.RCNTDataBits                   = arg.RCNTDataBits                  
+        this.RCNTIRQ                        = arg.RCNTIRQ                       
+        this.RCNTMode                       = arg.RCNTMode                      
+        this.SIOBaudRate                    = arg.SIOBaudRate                   
+        this.SIOCNT0_DATA                   = arg.SIOCNT0_DATA                  
+        this.SIOCNT_IRQ                     = arg.SIOCNT_IRQ                    
+        this.SIOCNT_MODE                    = arg.SIOCNT_MODE                   
+        this.SIOCNT_UART_CTS                = arg.SIOCNT_UART_CTS               
+        this.SIOCNT_UART_FIFO               = arg.SIOCNT_UART_FIFO              
+        this.SIOCNT_UART_FIFO_ENABLE        = arg.SIOCNT_UART_FIFO_ENABLE       
+        this.SIOCNT_UART_MISC               = arg.SIOCNT_UART_MISC              
+        this.SIOCNT_UART_PARITY_ENABLE      = arg.SIOCNT_UART_PARITY_ENABLE     
+        this.SIOCNT_UART_RECV_ENABLE        = arg.SIOCNT_UART_RECV_ENABLE       
+        this.SIOCNT_UART_SEND_ENABLE        = arg.SIOCNT_UART_SEND_ENABLE       
+        this.SIOCOMMERROR                   = arg.SIOCOMMERROR                  
+        this.SIODATA8                       = arg.SIODATA8                      
+        this.SIODATA_A                      = arg.SIODATA_A                     
+        this.SIODATA_B                      = arg.SIODATA_B                     
+        this.SIODATA_C                      = arg.SIODATA_C                     
+        this.SIODATA_D                      = arg.SIODATA_D                     
+        this.SIOMULT_PLAYER_NUMBER          = arg.SIOMULT_PLAYER_NUMBER         
+        this.SIOShiftClockDivider           = arg.SIOShiftClockDivider          
+        this.SIOShiftClockExternal          = arg.SIOShiftClockExternal         
+        this.SIOTransferStarted             = arg.SIOTransferStarted            
+        this.serialBitsShifted              = arg.serialBitsShifted             
+        this.shiftClocks                    = arg.shiftClocks                   
+    
+        /* Save Data */
+        this.saveType                = arg.saveType               
+        // TODO: switch reference to saveType?
+    
+        this.GPIOChip = {};
+        this.GPIOChip.data           = arg.GPIOChip.data          
+        this.GPIOChip.direction      = arg.GPIOChip.direction     
+        this.GPIOChip.readWrite      = arg.GPIOChip.readWrite     
+        this.GPIOChip.type           = arg.GPIOChip.type          
+        
+        this.GPIOChip.RTC = {};
+        this.GPIOChip.RTC.pins            = arg.GPIOChip.RTC.pins           
+        this.GPIOChip.RTC.direction       = arg.GPIOChip.RTC.direction      
+        this.GPIOChip.RTC.totalBytes      = arg.GPIOChip.RTC.totalBytes     
+        this.GPIOChip.RTC.bytesRemaining  = arg.GPIOChip.RTC.bytesRemaining 
+        this.GPIOChip.RTC.transferStep    = arg.GPIOChip.RTC.transferStep   
+        this.GPIOChip.RTC.reading         = arg.GPIOChip.RTC.reading        
+        this.GPIOChip.RTC.bitsRead        = arg.GPIOChip.RTC.bitsRead       
+        this.GPIOChip.RTC.bits            = arg.GPIOChip.RTC.bits           
+        this.GPIOChip.RTC.command         = arg.GPIOChip.RTC.command        
+        this.GPIOChip.RTC.control         = arg.GPIOChip.RTC.control        
+        this.GPIOChip.RTC.time            = arg.GPIOChip.RTC.time           
+    
+        this.UNDETERMINED = {};
+        this.UNDETERMINED.saves         = arg.UNDETERMINED.saves        
+        this.UNDETERMINED.possible      = arg.UNDETERMINED.possible     
+    
+        this.SRAMChip = {};
+        this.SRAMChip.TILTChip          = arg.SRAMChip.TILTChip         
+        this.SRAMChip.TILTChipUnlocked  = arg.SRAMChip.TILTChipUnlocked 
+        this.SRAMChip.saves             = arg.SRAMChip.saves            
+    
+        this.FLASHChip = {};
+        this.FLASHChip.BANKOffset               = arg.FLASHChip.BANKOffset              
+        this.FLASHChip.flashCommand             = arg.FLASHChip.flashCommand            
+        this.FLASHChip.flashCommandUnlockStage  = arg.FLASHChip.flashCommandUnlockStage 
+        this.FLASHChip.largestSizePossible      = arg.FLASHChip.largestSizePossible     
+        this.FLASHChip.notATMEL                 = arg.FLASHChip.notATMEL                
+        this.FLASHChip.saves                    = arg.FLASHChip.saves                   
+        this.FLASHChip.writeBytesLeft           = arg.FLASHChip.writeBytesLeft          
+    
+        this.EEPROMChip = {};
+        this.EEPROMChip.address              = arg.EEPROMChip.address             
+        this.EEPROMChip.bitsProcessed        = arg.EEPROMChip.bitsProcessed       
+        this.EEPROMChip.buffer               = arg.EEPROMChip.buffer              
+        this.EEPROMChip.largestSizePossible  = arg.EEPROMChip.largestSizePossible 
+        this.EEPROMChip.mode                 = arg.EEPROMChip.mode                
+        this.EEPROMChip.saves                = arg.EEPROMChip.saves               
+    
+    }
 }
 
 SaveState.prototype.assign = function (target, name, value) {
@@ -1288,3 +1936,5 @@ SaveState.prototype.load = function (IOCore) {
    this.assign(IOCore.saves.EEPROMChip, "mode"                , this.EEPROMChip.mode               ); 
    this.assign(IOCore.saves.EEPROMChip, "saves"               , this.EEPROMChip.saves              );  
 }
+
+
